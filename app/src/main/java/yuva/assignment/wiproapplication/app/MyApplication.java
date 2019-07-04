@@ -10,14 +10,10 @@ public class MyApplication extends Application {
     private static ApiComponent mApiComponent;
     private static MyApplication mInstance;
 
-
     public static synchronized MyApplication getInstance() {
         return mInstance;
     }
 
-//    public void setConnectivityListener(ConnectivityReceiver.ConnectivityReceiverListener listener) {
-//        ConnectivityReceiver.connectivityReceiverListener = listener;
-//    }
     @Override
     public void onCreate() {
         super.onCreate();

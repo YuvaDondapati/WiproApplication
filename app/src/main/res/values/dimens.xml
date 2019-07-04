@@ -5,5 +5,9 @@
     <dimen name="img_thumbnail_height">90dp</dimen>
     <dimen name="img_thumbnail_width">90dp</dimen>
     <dimen name="desc_margin_right">5dp</dimen>
+    <dimen name="margin">8dp</dimen>
+    <dimen name="cornerradius">10dp</dimen>
+    <dimen name="cardviewHeight">130dp</dimen>
+    <dimen name="imageDim">100dp</dimen>
 
 </resources>

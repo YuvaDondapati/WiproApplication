@@ -3,7 +3,6 @@ package yuva.assignment.wiproapplication.fragment;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -13,14 +12,11 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
-
-import com.google.android.material.snackbar.Snackbar;
-
 import java.util.Arrays;
 
 import butterknife.BindView;
@@ -112,22 +108,18 @@ public class FactsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     private void loadDataToViewModel() {
         // Showing refresh animation before making http call
 
-        System.out.println("********** model.isDataAvailableViewModel()"+model.isDataAvailableViewModel());
-        if(model.isDataAvailableViewModel())
-        {
+        System.out.println("********** model.isDataAvailableViewModel()" + model.isDataAvailableViewModel());
+        if (model.isDataAvailableViewModel()) {
             showRecyclerView();
-//            showSnack(false);
             model.getData().observe(this, new Observer<Country>() {
                 @Override
                 public void onChanged(@Nullable Country country) {
                     updateAdapter(country);
                 }
             });
-        }
-        else {
+        } else {
             getUpdatedData();
         }
-
     }
 
     private void getUpdatedData() {
@@ -136,21 +128,17 @@ public class FactsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         model.getFacts().observe(this, new Observer<Country>() {
             @Override
             public void onChanged(@Nullable Country country) {
-                System.out.println("******** update country"+country);
+                System.out.println("******** update country" + country);
                 updateAdapter(country);
             }
         });
     }
 
-    private void showNoConnection() {
-        imgNoInternet.setVisibility(View.VISIBLE);
-        rvFacts.setVisibility(View.GONE);
-        swipeContainer.setRefreshing(false);
-    }
     private void showRecyclerView() {
         imgNoInternet.setVisibility(View.GONE);
         rvFacts.setVisibility(View.VISIBLE);
     }
+
     private void updateAdapter(@Nullable Country country) {
         adapter = new CountryFactsAdapter(Arrays.asList(country.getRows()), getActivity().getApplicationContext());
         rvFacts.setAdapter(adapter);
@@ -169,53 +157,11 @@ public class FactsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         loadDataToViewModel();
     }
 
-
-    // Method to manually check connection status
-//    private boolean checkConnection() {
-//        return ConnectivityReceiver.isConnected();
-//
-//    }
-
-    // Showing the status in Snackbar
-    private void showSnack(boolean isConnected) {
-        String message;
-        int color;
-        if (isConnected) {
-            message = Constant.INTERNET_CONNECTED;
-            color = Color.WHITE;
-        } else {
-            message = Constant.INTERNET_NOT_CONNECTED;
-            color = Color.RED;
-        }
-
-        Snackbar snackbar = Snackbar
-                .make(getActivity().findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG);
-
-        View sbView = snackbar.getView();
-        TextView textView = (TextView) sbView.findViewById(R.id.snackbar_text);
-        textView.setTextColor(color);
-        snackbar.show();
-    }
-
     @Override
     public void onResume() {
         super.onResume();
-        // register connection status listener
         MyApplication.getInstance();
-//        if (!checkConnection()) {
-//            showSnack(false);
-//        }
-
     }
-
-    /**
-     * Callback will be triggered when there is change in
-     * network connection
-     */
-//    @Override
-//    public void onNetworkConnectionChanged(boolean isConnected) {
-//        showSnack(isConnected);
-//    }
 
     @Override
     public void onDestroyView() {

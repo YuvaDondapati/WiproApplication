@@ -8,13 +8,14 @@ import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
 import android.widget.FrameLayout;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import yuva.assignment.wiproapplication.fragment.FactsFragment;
 
 
 public class MainActivity extends AppCompatActivity implements FactsFragment.CountrySelectedListener {
-//    private ActionBar actionBar;
+    private ActionBar actionBar;
     @BindView(R.id.fragmentContainer)
     FrameLayout fragmentContainer;
 
@@ -23,7 +24,7 @@ public class MainActivity extends AppCompatActivity implements FactsFragment.Cou
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-//        actionBar = getSupportActionBar();
+        actionBar = getSupportActionBar();
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragmentContainer);
         if (fragment == null) {
@@ -32,12 +33,10 @@ public class MainActivity extends AppCompatActivity implements FactsFragment.Cou
                     .add(R.id.fragmentContainer, fragment)
                     .commit();
         }
-
     }
 
     public void onCountrySelected(String title) {
-//        actionBar.setTitle(title);
-        System.out.println("*********** title "+ title);
+        actionBar.setTitle(title);
     }
 
 
