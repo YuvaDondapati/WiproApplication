@@ -1,3 +1,18 @@
 package yuva.assignment.wiproapplication.model
 
-class Facts(var title: String?, var description: String?, var imageHref: String?)
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
+
+data class Facts(
+
+        @SerializedName("title")
+        @Expose
+        var title: String? = null,
+        @SerializedName("description")
+        @Expose
+        var description: String? = null,
+        @SerializedName("imageHref")
+        @Expose
+        var imageHref: String? = null
+
+)
