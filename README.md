@@ -1,6 +1,6 @@
 Wipro Assignment
 
-This application implemeted using MVVM pattern including Android Architectural components and thirda party libraries such as Dagger2, Butterknife, Glide etc.
+This application implemeted using MVVM pattern in Kotlin including Android Architectural components and some important third party libraries such as Dagger2, Butterknife, Glide etc.
 
 The main components in the MVVM pattern are:
 
