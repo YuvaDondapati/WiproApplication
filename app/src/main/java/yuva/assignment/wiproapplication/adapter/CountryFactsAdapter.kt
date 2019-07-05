@@ -13,25 +13,34 @@ import com.bumptech.glide.request.RequestOptions
 import yuva.assignment.wiproapplication.R
 import yuva.assignment.wiproapplication.app.Constant
 import yuva.assignment.wiproapplication.model.Facts
+import butterknife.BindView
+import butterknife.ButterKnife
+
 
 class CountryFactsAdapter(private val facts: List<Facts>?, internal var context: Context) : RecyclerView.Adapter<CountryFactsAdapter.FactsViewHolder>() {
     private val mInflater: LayoutInflater
 
     class FactsViewHolder(v: View) : RecyclerView.ViewHolder(v) {
+
+        @BindView(R.id.tvTitle)
+        lateinit var movieTitle: TextView
+
+        @BindView(R.id.tvDescription)
+        lateinit var description: TextView
+
+        @BindView(R.id.countryImage)
+        lateinit var imageView: ImageView
+
         internal var moviesLayout: LinearLayout? = null
-        internal var movieTitle: TextView
-        internal var imageView: ImageView
-        internal var description: TextView
 
         init {
-            movieTitle = itemView.findViewById(R.id.tvTitle)
-            description = itemView.findViewById(R.id.tvDescription)
-            imageView = itemView.findViewById(R.id.countryImage)
+            ButterKnife.bind(this, v);
         }
     }
 
     init {
         this.mInflater = LayoutInflater.from(context)
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup,
@@ -42,12 +51,12 @@ class CountryFactsAdapter(private val facts: List<Facts>?, internal var context:
     }
 
     override fun onBindViewHolder(holder: FactsViewHolder, position: Int) {
+
         val title = if (facts?.get(position)?.title == null || facts[position]?.title == "") Constant.NO_TITLE else facts[position].title
         val description = if (facts?.get(position)?.description == null || facts?.get(position).description == "") Constant.NO_DESC else facts[position].description
         holder.movieTitle.text = title
         holder.description.text = description
         val imageUrl = facts?.get(position)?.imageHref
-        println("*************** image url   "+imageUrl)
         val finalUrl: String?
         if (imageUrl != null && imageUrl.contains("http:")) {
             finalUrl = imageUrl.replace("http", "https")

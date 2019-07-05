@@ -103,8 +103,6 @@ class FactsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private fun loadDataToViewModel() {
         // Showing refresh animation before making http call
-
-        println("********** model.isDataAvailableViewModel()" + model!!.isDataAvailableViewModel)
         if (model!!.isDataAvailableViewModel) {
             showRecyclerView()
             model!!.data?.observe(this, Observer { country -> updateAdapter(country) })
@@ -117,7 +115,6 @@ class FactsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         showRecyclerView()
         swipeContainer.isRefreshing = true
         model!!.facts.observe(this, Observer { country ->
-            println("******** update country" + country!!)
             updateAdapter(country)
         })
     }
