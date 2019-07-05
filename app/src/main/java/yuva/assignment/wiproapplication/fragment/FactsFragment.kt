@@ -37,9 +37,14 @@ class FactsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private var adapter: CountryFactsAdapter? = null
     private var mCallback: CountrySelectedListener? = null
 
-    lateinit var rvFacts: RecyclerView
-    var imgNoInternet: ImageView? = null
-    lateinit var swipeContainer: SwipeRefreshLayout
+    @BindView(R.id.rvFacts)
+    lateinit var rvFacts : RecyclerView
+
+    @BindView(R.id.imgnointernet)
+    lateinit var imgNoInternet : ImageView
+
+    @BindView(R.id.swipe_container)
+    lateinit var swipeContainer : SwipeRefreshLayout
 
     private var unbinder: Unbinder? = null
     var model: FactsViewModel? = null
@@ -53,13 +58,13 @@ class FactsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_factlist, container, false)
-        rvFacts = view.findViewById(R.id.rvFacts)
-        imgNoInternet = view.findViewById(R.id.imgnointernet)
+        // bind view using butter knife
+        unbinder = ButterKnife.bind(this, view);
         model = ViewModelProviders.of(this).get(FactsViewModel::class.java)
         rvFacts.layoutManager = LinearLayoutManager(activity)
         rvFacts.addItemDecoration(MyDividerItemDecoration(activity!!, LinearLayoutManager.VERTICAL, 16))
         // SwipeRefreshLayout
-        swipeContainer = view.findViewById<View>(R.id.swipe_container) as SwipeRefreshLayout
+        // swipeContainer = view.findViewById<View>(R.id.swipe_container) as SwipeRefreshLayout
         swipeContainer.setOnRefreshListener(this)
         swipeContainer.setColorSchemeResources(R.color.colorPrimary,
                 android.R.color.holo_green_dark,
@@ -74,8 +79,6 @@ class FactsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             // Fetching data from server
             loadDataToViewModel()
         }
-
-        unbinder = ButterKnife.bind(this, view)
         return view
     }
 
