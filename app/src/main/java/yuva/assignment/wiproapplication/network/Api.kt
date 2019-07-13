@@ -1,6 +1,7 @@
 package yuva.assignment.wiproapplication.network
 
 
+import io.reactivex.Observable
 import retrofit2.Call
 import retrofit2.http.GET
 import yuva.assignment.wiproapplication.model.Country
@@ -8,5 +9,5 @@ import yuva.assignment.wiproapplication.model.Country
 interface Api {
 
     @get:GET("facts.json")
-    val countryFacts: Call<Country>
+    val countryFacts: Observable<Country>
 }

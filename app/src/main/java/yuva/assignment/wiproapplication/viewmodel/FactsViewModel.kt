@@ -1,8 +1,13 @@
 package yuva.assignment.wiproapplication.viewmodel
 
+import android.annotation.SuppressLint
+import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 import retrofit2.Call
@@ -18,12 +23,13 @@ class FactsViewModel internal constructor() : ViewModel() {
 
     @Inject
     lateinit var retrofit: Retrofit
-    //this is the data that we will fetch asynchronously
     private var factsObj: MutableLiveData<Country>? = null
-    //we will call this method to get the data
-    //if the Object is null
-    //we will load it asynchronously from server in this method
-    //finally we will return the Object
+
+    private var disposable = CompositeDisposable()
+
+    /*
+    To retrive data from server
+     */
     val facts: LiveData<Country>
         get() {
             if (factsObj == null) {
@@ -34,36 +40,21 @@ class FactsViewModel internal constructor() : ViewModel() {
         }
 
     val isDataAvailableViewModel: Boolean
-        get() = if (factsObj != null) {
-            true
-        } else {
-            false
-        }
+        get() = factsObj != null
 
     val data: LiveData<Country>?
         get() = factsObj
 
     init {
         MyApplication.netComponent?.inject(this)
-//        (application as MyApplication).apiComponent.inject(this)
     }
 
-    //This method is using Retrofit to get the JSON data from URL
-    private fun loadFacts() {
-
+    fun loadFacts() {
         val api = retrofit.create(Api::class.java)
-        val call = api.countryFacts
-
-
-        call.enqueue(object : Callback<Country> {
-            override fun onResponse(call: Call<Country>, response: Response<Country>) {
-                factsObj!!.value = response.body()
-            }
-
-            override fun onFailure(call: Call<Country>, t: Throwable) {
-
-            }
-        })
+        disposable.add(api.countryFacts
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { country -> factsObj!!.value = country})
     }
 
 }

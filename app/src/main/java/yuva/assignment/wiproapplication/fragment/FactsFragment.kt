@@ -1,6 +1,5 @@
 package yuva.assignment.wiproapplication.fragment
 
-
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
@@ -10,41 +9,39 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.recyclerview.widget.RecyclerView
-
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import java.util.Arrays
-
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.Unbinder
-import yuva.assignment.wiproapplication.R
 import yuva.assignment.wiproapplication.adapter.CountryFactsAdapter
-import yuva.assignment.wiproapplication.app.Constant
 import yuva.assignment.wiproapplication.app.MyApplication
 import yuva.assignment.wiproapplication.model.Country
-import yuva.assignment.wiproapplication.model.Facts
 import yuva.assignment.wiproapplication.utils.MyDividerItemDecoration
 import yuva.assignment.wiproapplication.viewmodel.FactsViewModel
+import yuva.assignment.wiproapplication.R
+import yuva.assignment.wiproapplication.utils.NetworkUtils
+
 
 /**
  * A simple [Fragment] subclass.
  */
 
 class FactsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
+
     private var adapter: CountryFactsAdapter? = null
     private var mCallback: CountrySelectedListener? = null
 
     @BindView(R.id.rvFacts)
-    lateinit var rvFacts : RecyclerView
+    lateinit var rvFacts: RecyclerView
 
     @BindView(R.id.imgnointernet)
-    lateinit var imgNoInternet : ImageView
+    lateinit var imgNoInternet: ImageView
 
     @BindView(R.id.swipe_container)
-    lateinit var swipeContainer : SwipeRefreshLayout
+    lateinit var swipeContainer: SwipeRefreshLayout
 
     private var unbinder: Unbinder? = null
     var model: FactsViewModel? = null
@@ -52,7 +49,7 @@ class FactsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     // Container Activity must implement this interface
     interface CountrySelectedListener {
-        fun onCountrySelected(Country: String?)
+        fun onCountrySelected(title: String?)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -85,24 +82,27 @@ class FactsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        var a: Activity? = null
+        var activity: Activity? = null
 
         if (context is Activity) {
-            a = context
+            activity = context
         }
         // This makes sure that the container activity has implemented
         // the callback interface. If not, it throws an exception
         try {
-            mCallback = a as CountrySelectedListener?
+            mCallback = activity as CountrySelectedListener?
         } catch (e: ClassCastException) {
-            throw ClassCastException(a!!.toString() + " must implement OnHeadlineSelectedListener")
+            throw ClassCastException(activity!!.toString() + " must implement OnHeadlineSelectedListener")
         }
-
     }
 
-
-    private fun loadDataToViewModel() {
-        // Showing refresh animation before making http call
+    public fun loadDataToViewModel() {
+        val networkUtils = context?.let { NetworkUtils(it) }
+        if (!networkUtils!!.isNetworkAvailable()) {
+            swipeContainer.isRefreshing = false
+            showNoInternet()
+            return;
+        }
         if (model!!.isDataAvailableViewModel) {
             showRecyclerView()
             model!!.data?.observe(this, Observer { country -> updateAdapter(country) })
@@ -119,12 +119,19 @@ class FactsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         })
     }
 
+
     private fun showRecyclerView() {
-        imgNoInternet!!.visibility = View.GONE
+        imgNoInternet.visibility = View.GONE
         rvFacts.visibility = View.VISIBLE
     }
 
-    private fun updateAdapter(country: Country?) {
+    private fun showNoInternet() {
+        imgNoInternet.visibility = View.VISIBLE
+        rvFacts.visibility = View.GONE
+    }
+
+
+    public fun updateAdapter(country: Country?) {
         adapter = CountryFactsAdapter(country?.rows, activity!!.applicationContext)
         rvFacts.adapter = adapter
 
