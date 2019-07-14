@@ -13,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.lifecycle.ViewModelProvider
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.Unbinder
@@ -23,6 +24,7 @@ import yuva.assignment.wiproapplication.utils.MyDividerItemDecoration
 import yuva.assignment.wiproapplication.viewmodel.FactsViewModel
 import yuva.assignment.wiproapplication.R
 import yuva.assignment.wiproapplication.utils.NetworkUtils
+import javax.inject.Inject
 
 
 /**
@@ -44,8 +46,14 @@ class FactsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     lateinit var swipeContainer: SwipeRefreshLayout
 
     private var unbinder: Unbinder? = null
-    var model: FactsViewModel? = null
+//    var model: FactsViewModel? = null
 
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    val model: FactsViewModel by lazy {
+        ViewModelProviders.of(this, viewModelFactory).get(FactsViewModel::class.java)
+    }
 
     // Container Activity must implement this interface
     interface CountrySelectedListener {
@@ -57,7 +65,7 @@ class FactsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         val view = inflater.inflate(R.layout.fragment_factlist, container, false)
         // bind view using butter knife
         unbinder = ButterKnife.bind(this, view);
-        model = ViewModelProviders.of(this).get(FactsViewModel::class.java)
+//        model = ViewModelProviders.of(this).get(FactsViewModel::class.java)
         rvFacts.layoutManager = LinearLayoutManager(activity)
         rvFacts.addItemDecoration(MyDividerItemDecoration(activity!!, LinearLayoutManager.VERTICAL, 16))
         // SwipeRefreshLayout
@@ -81,6 +89,8 @@ class FactsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
 
     override fun onAttach(context: Context?) {
+//        AndroidSupportInjection.inject(this)
+        MyApplication.netComponent?.inject(this)
         super.onAttach(context)
         var activity: Activity? = null
 
@@ -98,14 +108,15 @@ class FactsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     public fun loadDataToViewModel() {
         val networkUtils = context?.let { NetworkUtils(it) }
+
         if (!networkUtils!!.isNetworkAvailable()) {
             swipeContainer.isRefreshing = false
             showNoInternet()
             return;
         }
-        if (model!!.isDataAvailableViewModel) {
+        if (model.isDataAvailableViewModel) {
             showRecyclerView()
-            model!!.data?.observe(this, Observer { country -> updateAdapter(country) })
+            model.data?.observe(this, Observer { country -> updateAdapter(country) })
         } else {
             getUpdatedData()
         }
@@ -114,7 +125,7 @@ class FactsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private fun getUpdatedData() {
         showRecyclerView()
         swipeContainer.isRefreshing = true
-        model!!.facts.observe(this, Observer { country ->
+        model.loadFacts().observe(this, Observer { country ->
             updateAdapter(country)
         })
     }
@@ -134,9 +145,7 @@ class FactsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     public fun updateAdapter(country: Country?) {
         adapter = CountryFactsAdapter(country?.rows, activity!!.applicationContext)
         rvFacts.adapter = adapter
-
         mCallback!!.onCountrySelected(country?.title)
-        // Stopping swipe refresh
         swipeContainer.isRefreshing = false
     }
 

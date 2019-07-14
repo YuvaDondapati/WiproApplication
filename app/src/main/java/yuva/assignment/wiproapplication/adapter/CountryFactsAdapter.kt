@@ -18,7 +18,8 @@ import butterknife.ButterKnife
 
 
 class CountryFactsAdapter(private val facts: List<Facts>?, internal var context: Context) : RecyclerView.Adapter<CountryFactsAdapter.FactsViewHolder>() {
-    private val mInflater: LayoutInflater
+
+    private val mInflater: LayoutInflater = LayoutInflater.from(context)
 
     class FactsViewHolder(v: View) : RecyclerView.ViewHolder(v) {
 
@@ -38,11 +39,6 @@ class CountryFactsAdapter(private val facts: List<Facts>?, internal var context:
         }
     }
 
-    init {
-        this.mInflater = LayoutInflater.from(context)
-
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup,
                                     viewType: Int): FactsViewHolder {
         val view = mInflater.inflate(R.layout.recyclerview_row, parent, false)
@@ -52,8 +48,8 @@ class CountryFactsAdapter(private val facts: List<Facts>?, internal var context:
 
     override fun onBindViewHolder(holder: FactsViewHolder, position: Int) {
 
-        val title = if (facts?.get(position)?.title == null || facts[position]?.title == "") Constant.NO_TITLE else facts[position].title
-        val description = if (facts?.get(position)?.description == null || facts?.get(position).description == "") Constant.NO_DESC else facts[position].description
+        val title = if (facts?.get(position)?.title == null || facts[position].title == "") Constant.NO_TITLE else facts[position].title
+        val description = if (facts?.get(position)?.description == null || facts.get(position).description == "") Constant.NO_DESC else facts[position].description
         holder.movieTitle.text = title
         holder.description.text = description
         val imageUrl = facts?.get(position)?.imageHref
@@ -75,9 +71,8 @@ class CountryFactsAdapter(private val facts: List<Facts>?, internal var context:
     }
 
     override fun getItemCount(): Int {
-        if (facts != null) {
+        if (facts != null)
             return facts.size
-        }
         return 0;
     }
 }

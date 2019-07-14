@@ -17,27 +17,12 @@ import retrofit2.Retrofit
 import yuva.assignment.wiproapplication.app.MyApplication
 import yuva.assignment.wiproapplication.model.Country
 import yuva.assignment.wiproapplication.network.Api
+import yuva.assignment.wiproapplication.utils.Repository
 import javax.inject.Named
 
-class FactsViewModel internal constructor() : ViewModel() {
+class FactsViewModel  @Inject constructor(private val mUserRepo: Repository): ViewModel() {
 
-    @Inject
-    lateinit var retrofit: Retrofit
     private var factsObj: MutableLiveData<Country>? = null
-
-    private var disposable = CompositeDisposable()
-
-    /*
-    To retrive data from server
-     */
-    val facts: LiveData<Country>
-        get() {
-            if (factsObj == null) {
-                factsObj = MutableLiveData()
-                loadFacts()
-            }
-            return factsObj as MutableLiveData<Country>
-        }
 
     val isDataAvailableViewModel: Boolean
         get() = factsObj != null
@@ -45,16 +30,17 @@ class FactsViewModel internal constructor() : ViewModel() {
     val data: LiveData<Country>?
         get() = factsObj
 
-    init {
-        MyApplication.netComponent?.inject(this)
+    fun loadFacts() : LiveData<Country> {
+        if (factsObj == null) {
+            factsObj = MutableLiveData()
+            factsObj=  mUserRepo.getCountyDetails()
+        }
+        return factsObj as MutableLiveData<Country>
     }
 
-    fun loadFacts() {
-        val api = retrofit.create(Api::class.java)
-        disposable.add(api.countryFacts
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { country -> factsObj!!.value = country})
+    override fun onCleared() {
+        super.onCleared()
+        mUserRepo.getCompositeDisposable().clear()
+        mUserRepo.getCompositeDisposable().dispose()
     }
-
 }
