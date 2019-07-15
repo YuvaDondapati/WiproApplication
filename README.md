@@ -11,7 +11,8 @@ The DataModel — abstracts the data source. The ViewModel works with the Da
 Screenshots:
 
 
-![SCR11](https://user-images.githubusercontent.com/25319743/61198044-a8297b80-a6f5-11e9-8f50-1325f5eba373.png)
+![SCR11](https://user-images.githubusercontent.com/25319743/61198086-eb83ea00-a6f5-11e9-82ad-fd5966afc95e.png)
 
-![SCR22](https://user-images.githubusercontent.com/25319743/61198047-ac559900-a6f5-11e9-89e0-e6ff0055b42c.png)
+![SCR22](https://user-images.githubusercontent.com/25319743/61198096-f179cb00-a6f5-11e9-83aa-1fa3a049fad9.png)
+
 
