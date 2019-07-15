@@ -9,5 +9,4 @@ The ViewModel — exposes streams of data relevant to the View
 The DataModel — abstracts the data source. The ViewModel works with the DataModel to get and save the data.
 
 Screenshots:
-
-![scr1](https://user-images.githubusercontent.com/25319743/60678510-58031b80-9ea2-11e9-8388-3889809b39c7.png)
+![SCR11](https://user-images.githubusercontent.com/25319743/61197979-33eed800-a6f5-11e9-8440-aca3e1cbb4bd.png)
