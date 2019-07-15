@@ -32,7 +32,7 @@ class FactsViewModel  @Inject constructor(private val mUserRepo: Repository): Vi
 
     fun loadFacts() : LiveData<Country> {
         if (factsObj == null) {
-            factsObj = MutableLiveData()
+//            factsObj = MutableLiveData()
             factsObj=  mUserRepo.getCountyDetails()
         }
         return factsObj as MutableLiveData<Country>

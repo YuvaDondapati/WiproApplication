@@ -1,6 +1,7 @@
 package yuva.assignment.wiproapplication
 
 import android.os.Build
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.nhaarman.mockitokotlin2.spy
 import org.junit.After
 import org.junit.Before
@@ -19,10 +20,14 @@ import org.mockito.Mock
 import yuva.assignment.wiproapplication.model.Facts
 import butterknife.internal.ListenerClass.NONE
 import io.reactivex.Observable
+import org.junit.Rule
 import org.mockito.Mockito.*
 import yuva.assignment.wiproapplication.network.Api
 import org.mockito.Mockito.`when`
 import retrofit2.Call
+import yuva.assignment.wiproapplication.utils.Repository
+import yuva.assignment.wiproapplication.viewmodel.FactsViewModel
+import javax.inject.Inject
 
 
 @RunWith(RobolectricTestRunner::class)
@@ -40,6 +45,8 @@ class MainActivityTest {
         MockitoAnnotations.initMocks(this)
         mainActivity = Robolectric.buildActivity(MainActivity::class.java).create().resume().get()
         factsFragment = mainActivity.supportFragmentManager.findFragmentById(R.id.fragmentContainer) as FactsFragment
+
+
     }
 
     @Test

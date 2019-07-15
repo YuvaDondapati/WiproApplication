@@ -1,16 +1,11 @@
 package yuva.assignment.wiproapplication.diprovider
 
 import android.app.Application
-
-import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-
 import javax.inject.Singleton
-
 import dagger.Module
 import dagger.Provides
-import dagger.Reusable
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -21,7 +16,6 @@ import yuva.assignment.wiproapplication.network.Api
 @Module
 class ApiModule(internal var mBaseUrl: String) {
 
-
     /**
      * Provides the Post service implementation.
      * @param retrofit the Retrofit object used to instantiate the service
@@ -31,8 +25,6 @@ class ApiModule(internal var mBaseUrl: String) {
     internal fun provideApi(retrofit: Retrofit): Api {
         return retrofit.create(Api::class.java)
     }
-
-
 
     @Provides
     @Singleton

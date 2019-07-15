@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -31,8 +30,6 @@ class CountryFactsAdapter(private val facts: List<Facts>?, internal var context:
 
         @BindView(R.id.countryImage)
         lateinit var imageView: ImageView
-
-        internal var moviesLayout: LinearLayout? = null
 
         init {
             ButterKnife.bind(this, v);
