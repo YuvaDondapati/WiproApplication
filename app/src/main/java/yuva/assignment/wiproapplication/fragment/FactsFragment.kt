@@ -45,7 +45,7 @@ class FactsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    val model: FactsViewModel by lazy {
+    private val model: FactsViewModel by lazy {
         ViewModelProviders.of(this, viewModelFactory).get(FactsViewModel::class.java)
     }
 
@@ -56,10 +56,8 @@ class FactsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_factlist, container, false)
-        unbinder = ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view)
         rvFacts.layoutManager = LinearLayoutManager(activity)
-//        rvFacts.addItemDecoration(MyDividerItemDecoration(activity!!, LinearLayoutManager.VERTICAL, 16))
-
         swipeContainer.setOnRefreshListener(this)
         swipeContainer.setColorSchemeResources(R.color.colorPrimary,
                 android.R.color.holo_green_dark,
@@ -95,7 +93,7 @@ class FactsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         if (!networkUtils!!.isNetworkAvailable()) {
             swipeContainer.isRefreshing = false
             showNoInternet()
-            return;
+            return
         }
         if (model.isDataAvailableViewModel) {
             showRecyclerView()

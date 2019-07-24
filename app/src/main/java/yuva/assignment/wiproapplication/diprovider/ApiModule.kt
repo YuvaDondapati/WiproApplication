@@ -55,11 +55,10 @@ class ApiModule(internal var mBaseUrl: String) {
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .baseUrl(mBaseUrl)
                 .client(okHttpClient)
-                .addCallAdapterFactory(rxJava2CallAdapterFactory)  // Todo item
+                .addCallAdapterFactory(rxJava2CallAdapterFactory)
                 .build()
     }
 
-    // Todo item
     @Singleton
     @Provides
     internal fun providesRxJava2CallAdapterFactory(): RxJava2CallAdapterFactory {
