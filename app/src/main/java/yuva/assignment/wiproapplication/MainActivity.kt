@@ -2,14 +2,7 @@ package yuva.assignment.wiproapplication
 
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
-
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-
 import android.os.Bundle
-import android.widget.FrameLayout
-
-import butterknife.BindView
 import butterknife.ButterKnife
 import yuva.assignment.wiproapplication.fragment.FactsFragment
 
@@ -35,7 +28,5 @@ class MainActivity : AppCompatActivity(), FactsFragment.CountrySelectedListener 
     override fun onCountrySelected(title: String?) {
         actionBar!!.title = title
     }
-
-
 
 }

@@ -11,6 +11,5 @@ import yuva.assignment.wiproapplication.fragment.FactsFragment
 @Singleton
 @Component(modules = [AppModule::class, ApiModule::class, ViewModelModule::class])
 interface ApiComponent {
-
     fun inject(fragment: FactsFragment)
 }

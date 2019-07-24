@@ -37,5 +37,4 @@ abstract class ViewModelModule {
     @ViewModelKey(FactsViewModel::class)
     internal abstract fun postListViewModel(viewModel: FactsViewModel): ViewModel
 
-    //Add more ViewModels here
 }

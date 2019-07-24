@@ -2,7 +2,6 @@ package yuva.assignment.wiproapplication.utils
 
 import android.content.Context
 import android.net.ConnectivityManager
-import yuva.assignment.wiproapplication.app.MyApplication
 
 class NetworkUtils(private var context: Context) {
 

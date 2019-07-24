@@ -32,7 +32,7 @@ class CountryFactsAdapter(private val facts: List<Facts>?, internal var context:
         lateinit var imageView: ImageView
 
         init {
-            ButterKnife.bind(this, v);
+            ButterKnife.bind(this, v)
         }
     }
 
@@ -40,7 +40,6 @@ class CountryFactsAdapter(private val facts: List<Facts>?, internal var context:
                                     viewType: Int): FactsViewHolder {
         val view = mInflater.inflate(R.layout.recyclerview_row, parent, false)
         return FactsViewHolder(view)
-
     }
 
     override fun onBindViewHolder(holder: FactsViewHolder, position: Int) {
@@ -51,8 +50,9 @@ class CountryFactsAdapter(private val facts: List<Facts>?, internal var context:
         holder.description.text = description
         val imageUrl = facts?.get(position)?.imageHref
         val finalUrl: String?
-        if (imageUrl != null && imageUrl.contains("http:")) {
-            finalUrl = imageUrl.replace("http", "https")
+
+        if (imageUrl != null &&  imageUrl.contains(Constant.HTTP)) {
+            finalUrl = imageUrl.replace(Constant.HTTP, Constant.HTTPS)
         } else {
             finalUrl = imageUrl
         }
@@ -70,6 +70,6 @@ class CountryFactsAdapter(private val facts: List<Facts>?, internal var context:
     override fun getItemCount(): Int {
         if (facts != null)
             return facts.size
-        return 0;
+        return 0
     }
 }

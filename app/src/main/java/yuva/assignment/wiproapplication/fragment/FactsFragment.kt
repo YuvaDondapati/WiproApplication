@@ -20,16 +20,11 @@ import butterknife.Unbinder
 import yuva.assignment.wiproapplication.adapter.CountryFactsAdapter
 import yuva.assignment.wiproapplication.app.MyApplication
 import yuva.assignment.wiproapplication.model.Country
-import yuva.assignment.wiproapplication.utils.MyDividerItemDecoration
 import yuva.assignment.wiproapplication.viewmodel.FactsViewModel
 import yuva.assignment.wiproapplication.R
 import yuva.assignment.wiproapplication.utils.NetworkUtils
 import javax.inject.Inject
 
-
-/**
- * A simple [Fragment] subclass.
- */
 
 class FactsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
@@ -46,7 +41,6 @@ class FactsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     lateinit var swipeContainer: SwipeRefreshLayout
 
     private var unbinder: Unbinder? = null
-//    var model: FactsViewModel? = null
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -55,7 +49,6 @@ class FactsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         ViewModelProviders.of(this, viewModelFactory).get(FactsViewModel::class.java)
     }
 
-    // Container Activity must implement this interface
     interface CountrySelectedListener {
         fun onCountrySelected(title: String?)
     }
@@ -63,25 +56,17 @@ class FactsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_factlist, container, false)
-        // bind view using butter knife
         unbinder = ButterKnife.bind(this, view);
-//        model = ViewModelProviders.of(this).get(FactsViewModel::class.java)
         rvFacts.layoutManager = LinearLayoutManager(activity)
-        rvFacts.addItemDecoration(MyDividerItemDecoration(activity!!, LinearLayoutManager.VERTICAL, 16))
-        // SwipeRefreshLayout
-        // swipeContainer = view.findViewById<View>(R.id.swipe_container) as SwipeRefreshLayout
+//        rvFacts.addItemDecoration(MyDividerItemDecoration(activity!!, LinearLayoutManager.VERTICAL, 16))
+
         swipeContainer.setOnRefreshListener(this)
         swipeContainer.setColorSchemeResources(R.color.colorPrimary,
                 android.R.color.holo_green_dark,
                 android.R.color.holo_orange_dark,
                 android.R.color.holo_blue_dark)
 
-        /**
-         * Showing Swipe Refresh animation on activity create
-         * As animation won't start on onCreate, post runnable is used
-         */
         swipeContainer.post {
-            // Fetching data from server
             loadDataToViewModel()
         }
         return view
@@ -89,7 +74,6 @@ class FactsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
 
     override fun onAttach(context: Context?) {
-//        AndroidSupportInjection.inject(this)
         MyApplication.netComponent?.inject(this)
         super.onAttach(context)
         var activity: Activity? = null
@@ -97,8 +81,7 @@ class FactsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         if (context is Activity) {
             activity = context
         }
-        // This makes sure that the container activity has implemented
-        // the callback interface. If not, it throws an exception
+
         try {
             mCallback = activity as CountrySelectedListener?
         } catch (e: ClassCastException) {
@@ -106,7 +89,7 @@ class FactsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         }
     }
 
-    public fun loadDataToViewModel() {
+    fun loadDataToViewModel() {
         val networkUtils = context?.let { NetworkUtils(it) }
 
         if (!networkUtils!!.isNetworkAvailable()) {
@@ -142,18 +125,14 @@ class FactsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
 
-    public fun updateAdapter(country: Country?) {
+    fun updateAdapter(country: Country?) {
         adapter = CountryFactsAdapter(country?.rows, activity!!.applicationContext)
         rvFacts.adapter = adapter
         mCallback!!.onCountrySelected(country?.title)
         swipeContainer.isRefreshing = false
     }
 
-    /**
-     * This method is called when swipe refresh is pulled down
-     */
     override fun onRefresh() {
-        // Fetching data from server
         loadDataToViewModel()
     }
 

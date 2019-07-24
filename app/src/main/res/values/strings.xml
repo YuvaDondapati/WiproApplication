@@ -2,4 +2,5 @@
     <string name="app_name">Wipro Application</string>
     <string name="title">title</string>
     <string name="description">description</string>
+    <string name="imageContent">profileImage</string>
 </resources>
